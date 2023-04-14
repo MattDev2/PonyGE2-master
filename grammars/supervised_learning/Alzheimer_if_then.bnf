@@ -1,0 +1,8 @@
+<cf> ::= np.where(<cond>,0, 1) 
+<cond> ::= (<var> <relop> <var>) | (<cond> <lop> <cond>)
+#<cond> ::= (<cond> <lop> <cond>) | (x[:, <varidx>] <relop> 0.<d><d>) 
+<lop> ::= & | "|"
+<relop> ::= > | < | >= | <=
+<var> ::= x[:, <varidx>] | 0.<d><d>
+<varidx> ::= GE_RANGE:dataset_n_vars
+<d> ::= GE_RANGE:9
