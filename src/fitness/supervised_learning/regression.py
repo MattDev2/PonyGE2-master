@@ -11,6 +11,8 @@ class regression(supervised_learning):
         # Initialise base fitness function class.
         super().__init__()
 
+        print("Ho settato il dataset con ", params['DATASET_TRAIN'])
+
         # Set error metric if it's not set already.
         if params['ERROR_METRIC'] is None:
             params['ERROR_METRIC'] = rmse

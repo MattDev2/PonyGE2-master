@@ -15,7 +15,7 @@ params = {
 
     # Evolutionary Parameters
     'POPULATION_SIZE': 200,
-    'GENERATIONS': 5000,
+    'GENERATIONS': 500,
     'HILL_CLIMBING_HISTORY': 1000,
     'SCHC_COUNT_METHOD': "count_all",
 
@@ -29,8 +29,8 @@ params = {
     'FITNESS_FUNCTION': "supervised_learning.regression",
 
     # Select problem dataset
-    'DATASET_TRAIN': "Alzheimer/train.csv",
-    'DATASET_TEST': "Alzheimer/test.csv",
+    'DATASET_TRAIN': None,
+    'DATASET_TEST': None,
     'DATASET_DELIMITER': None,
 
     # Set grammar file
@@ -51,7 +51,7 @@ params = {
     'TARGET': "ponyge_rocks",
 
     # Set max sizes of individuals
-    'MAX_TREE_DEPTH': 20,  # SET TO 90 DUE TO PYTHON EVAL() STACK LIMIT.
+    'MAX_TREE_DEPTH': 50,  # SET TO 90 DUE TO PYTHON EVAL() STACK LIMIT.
     # INCREASE AT YOUR OWN RISK.
     'MAX_TREE_NODES': 100,
     'CODON_SIZE': 100000,
@@ -96,7 +96,7 @@ params = {
     'MUTATION': "operators.mutation.int_flip_per_codon",
     # Set mutation probability (None defaults to 1 over the length of
     # the genome for each codon)
-    'MUTATION_PROBABILITY': 0.2,
+    'MUTATION_PROBABILITY': None,
     # Set number of mutation events
     'MUTATION_EVENTS': 1,
     # Prevents mutation from generating invalids.

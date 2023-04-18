@@ -60,7 +60,7 @@ class progsys(base_ff):
             self.eval.stdin.close()
             self.eval = self.create_eval_process()
             
-       	if 'quality' in	result:
+        if 'quality' in	result:
             if result['quality'] > sys.maxsize:
                 result['quality'] = sys.maxsize
 
