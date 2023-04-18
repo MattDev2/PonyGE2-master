@@ -2,6 +2,8 @@ import warnings
 
 import numpy as np
 from sklearn.metrics import f1_score as sklearn_f1_score
+from sklearn.metrics import accuracy_score
+
 
 
 def mae(y, yhat):
@@ -108,10 +110,8 @@ def f1_score(y, yhat):
     if -1 in y_vals:
         y[y == -1] = 0
 
-    #print(y_vals)
     # We binarize with a threshold, so this cannot be used for multi-class
-    #print(len(y_vals))
-    assert len(y_vals) == 1 or len(y_vals) == 2
+    assert len(y_vals) == 2
 
     # convert real values to boolean {0, 1} with a zero threshold
     yhat = (yhat > 0)
@@ -139,3 +139,37 @@ def Hamming_error(y, yhat):
 
 
 Hamming_error.maximise = False
+
+def accuracy_percentage(y, yhat):
+    """
+    The accuracy is a metric for classification which calculates the percentage of 
+    correctly classified instances out of the total instances.
+    For accuracy, higher is better.
+
+    :param y: The expected input (i.e. from dataset).
+    :param yhat: The given input (i.e. from phenotype).
+    :return: The accuracy percentage.
+    """
+
+    # if phen is a constant, eg 0.001 (doesn't refer to x), then yhat
+    # will be a constant. that will break accuracy. so convert to a
+    # constant array.
+    if not isinstance(yhat, np.ndarray) or len(yhat.shape) < 1:
+        yhat = np.ones_like(y) * yhat
+
+    # Deal with possibility of {-1, 1} or {0, 1} class label
+    # convention. 
+    y_vals = set(y)
+    # convert from {-1, 1} to {0, 1}
+    if -1 in y_vals:
+        y[y == -1] = 0
+
+    # We binarize with a threshold, so this cannot be used for multi-class
+    assert len(y_vals) == 1 or len(y_vals) == 2
+
+    # convert real values to boolean {0, 1} with a zero threshold
+    yhat = (yhat > 0)
+
+    return accuracy_score(y, yhat) * 100
+
+accuracy_percentage.maximise = True

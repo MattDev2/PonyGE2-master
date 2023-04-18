@@ -20,6 +20,7 @@ import time
 import numpy as np
 import random
 import os
+import pickle
 
 from utilities.stats import trackers
 
@@ -36,6 +37,22 @@ def clear_trackers():
     trackers.best_ever = None
     # Store the best ever individual here.
 
+def load_data_pickle(file_path):
+    with open(file_path, 'rb') as f:
+        data = pickle.load(f)
+
+    return data['test_results'], data['train_results'], data['test_evolution'], data['train_evolution']
+
+def save_plot(file_path, data):
+        plt.plot(data)
+
+        # Add title and labels
+        plt.title('Line Plot of Values')
+        plt.xlabel('Index')
+        plt.ylabel('Value')
+
+        # Display the plot
+        plt.savefig(file_path)
 
 def append_to_file(file_path, float_value, recreate = False):
     if recreate and os.path.exists(file_path):
@@ -49,43 +66,108 @@ def mane():
     """ Run program """
     set_params(sys.argv[1:])  # exclude the ponyge.py arg itself
 
-    #seeds = np.random.randint(1, 4294967295, 3)
-    seeds = [2131231231131]
+    test_results = []
+    train_results = []
+
+    test_evolution = []
+    train_evolution = []
+
+    crossover_rates = np.linspace(0, 1, 3)
+    #seeds = np.random.randint(1, 4294967295, 5)
+    
+    seeds = [74576657456]
+    results = {}
+
     if len(seeds) == 1:
         random.seed(seeds[0])
+        params['CROSSOVER_PROBABILITY'] = crossover_rates[0]
         individuals = params['SEARCH_LOOP']()
 
         # Print final review
         get_stats(individuals, end=True)
 
         print(((trackers.best_fitness_list)))
+        
+        print('\n\n\n')
+
         print(((trackers.best_test_fitness_list)))
         
-        plt.plot(trackers.best_test_fitness_list)
-
-        # Add title and labels
-        plt.title('Line Plot of Values')
-        plt.xlabel('Index')
-        plt.ylabel('Value')
-
-        # Display the plot
-        plt.savefig('line_plot.png')
+        save_plot('line_plot.png', trackers.best_test_fitness_list)
 
     else:
-        for i, seed in enumerate(seeds):
-            params['ITERATION_INDEX'] = i
-            random.seed(int(seed))
-            # Run evolution
-            individuals = params['SEARCH_LOOP']()
-            # Print final review
-            print(seed)
-            
-            get_stats(individuals, end=True)
-            
-            # append_to_file(params['TRAIN_PERFORMANCE_PATH'], trackers.best_ever.training_fitness)
-            # append_to_file(params['TEST_PERFORMANCE_PATH'], trackers.best_ever.test_fitness)
+        for c in crossover_rates:
+            for i, seed in enumerate(seeds):
+                params['ITERATION_INDEX'] = i
+                params['CROSSOVER_PROBABILITY'] = c
 
-            clear_trackers()
+                random.seed(int(seed))
+                # Run evolution
+                individuals = params['SEARCH_LOOP']()
+                # Print final review
+                get_stats(individuals, end=True)
+
+                key = (i, c)
+                results[key] = {
+                    'test_result': trackers.best_ever.test_fitness,
+                    'train_result': trackers.best_ever.training_fitness,
+                    'test_evolution': trackers.best_test_fitness_list,
+                    'train_evolution': trackers.best_fitness_list
+                }
+
+                clear_trackers()
+                
+        fitness_shape = (len(seeds), len(crossover_rates))
+        fitness_list_shapes = (*fitness_shape, params['GENERATIONS'] + 1)
+
+        test_results = np.reshape([results[key]['test_result'] for key in sorted(results)], fitness_shape)
+        train_results = np.reshape([results[key]['train_result'] for key in sorted(results)], fitness_shape)
+        test_evolution = np.reshape([results[key]['test_evolution'] for key in sorted(results)], fitness_list_shapes)
+        train_evolution = np.reshape([results[key]['train_evolution'] for key in sorted(results)], fitness_list_shapes)
+        
+        file_path = 'data_results1.pkl'
+        data = {
+            'crossover_rates': crossover_rates,
+            'seeds': seeds,
+            'test_results': test_results,
+            'train_results': train_results,
+            'test_evolution': test_evolution,
+            'train_evolution': train_evolution
+        }
+
+        with open(file_path, 'wb') as f:
+            pickle.dump(data, f)
+
+
+        #save_data_pickle("data_results1.pkl", test_results, train_results, test_evolution, train_evolution)
+
+
 
 if __name__ == "__main__":
     mane()
+    #data = load_data_pickle("data_results.pkl")
+    #print((data[3].shape))
+    # Define the file path of the saved data
+    file_path = 'data_results1.pkl'
+
+    # Load the data
+    with open(file_path, 'rb') as f:
+        loaded_data = pickle.load(f)
+
+    # Access the loaded data
+    crossover_rates = loaded_data['crossover_rates']
+    seeds = loaded_data['seeds']
+    test_results = loaded_data['test_results']
+    train_results = loaded_data['train_results']
+    test_evolution = loaded_data['test_evolution']
+    train_evolution = loaded_data['train_evolution']
+
+    #print(test_results[1][2])
+
+    # # Now you can use the loaded data as needed, for example:
+    # print("Crossover rates:", crossover_rates)
+    # print("Seeds:", seeds)
+    # print("Test results shape:", test_results.shape)
+    # print("Train results shape:", train_results.shape)
+    # print("Test evolution shape:", test_evolution.shape)
+    # print("Train evolution shape:", train_evolution.shape)
+

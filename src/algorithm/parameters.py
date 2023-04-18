@@ -1,7 +1,7 @@
 from multiprocessing import cpu_count
 from os import path
 from socket import gethostname
-#from utilities.fitness.error_metric import f1_score
+from utilities.fitness.error_metric import accuracy_percentage
 
 
 hostname = gethostname().split('.')
@@ -14,8 +14,8 @@ params = {
     'STEP': 'step',
 
     # Evolutionary Parameters
-    'POPULATION_SIZE': 2000,
-    'GENERATIONS': 20,
+    'POPULATION_SIZE': 200,
+    'GENERATIONS': 5000,
     'HILL_CLIMBING_HISTORY': 1000,
     'SCHC_COUNT_METHOD': "count_all",
 
@@ -42,7 +42,7 @@ params = {
     'PERMUTATION_RAMPS': 5,
 
     # Select error metric
-    'ERROR_METRIC': "f1_score",
+    'ERROR_METRIC': accuracy_percentage,
 
     # Optimise constants in the supervised_learning fitness function.
     'OPTIMIZE_CONSTANTS': False,
@@ -53,7 +53,7 @@ params = {
     # Set max sizes of individuals
     'MAX_TREE_DEPTH': 20,  # SET TO 90 DUE TO PYTHON EVAL() STACK LIMIT.
     # INCREASE AT YOUR OWN RISK.
-    'MAX_TREE_NODES': None,
+    'MAX_TREE_NODES': 100,
     'CODON_SIZE': 100000,
     'MAX_GENOME_LENGTH': 50,
     'MAX_WRAPS': 0,
@@ -87,7 +87,7 @@ params = {
     # Set crossover operator.
     'CROSSOVER': "operators.crossover.variable_onepoint",
     # Set crossover probability.
-    'CROSSOVER_PROBABILITY': 0.9,
+    'CROSSOVER_PROBABILITY': 0.5,
     # Prevents crossover from generating invalids.
     'NO_CROSSOVER_INVALIDS': False,
 
@@ -96,7 +96,7 @@ params = {
     'MUTATION': "operators.mutation.int_flip_per_codon",
     # Set mutation probability (None defaults to 1 over the length of
     # the genome for each codon)
-    'MUTATION_PROBABILITY': None,
+    'MUTATION_PROBABILITY': 0.2,
     # Set number of mutation events
     'MUTATION_EVENTS': 1,
     # Prevents mutation from generating invalids.
