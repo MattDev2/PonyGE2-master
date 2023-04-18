@@ -24,6 +24,7 @@ import numpy as np
 import random
 import os
 import pickle
+from tqdm import tqdm
 
 from utilities.stats import trackers
 
@@ -102,6 +103,7 @@ def mane(fold, hyperparam, seeds):
         save_plot('line_plot.png', trackers.best_test_fitness_list)
 
     else:
+        pbar = tqdm(total = len(seeds) * len(hyperparam['list']))
         for h in hyperparam['list']:
             for i, seed in enumerate(seeds):
                 params['ITERATION_INDEX'] = i
@@ -112,9 +114,9 @@ def mane(fold, hyperparam, seeds):
                 individuals = params['SEARCH_LOOP']()
                 # Print final review
 
-                print("Seed :",seed, "\n")
-                print(params['DATASET_TRAIN'])
-                print(params['DATASET_TEST'])
+                #print("Seed :",seed, "\n")
+                #print(params['DATASET_TRAIN'])
+                #print(params['DATASET_TEST'])
 
                 get_stats(individuals, end=True)
 
@@ -127,6 +129,8 @@ def mane(fold, hyperparam, seeds):
                 }
 
                 clear_trackers()
+                pbar.update(1)
+            #pbar.update(len(seeds))
                 
         fitness_shape = (len(seeds), len(hyperparam['list']))
         fitness_list_shapes = (*fitness_shape, params['GENERATIONS'] + 1)
@@ -139,7 +143,7 @@ def mane(fold, hyperparam, seeds):
         output_file_path = f"./results_data/results_data_fold_{fold}.pkl"
         
         data = {
-            'crossover_rates': hyperparam['list'],
+            'hyperparam': hyperparam,
             'seeds': seeds,
             'test_results': test_results,
             'train_results': train_results,
@@ -153,8 +157,9 @@ def mane(fold, hyperparam, seeds):
 
 if __name__ == "__main__":
     
-    hyperparameter_list = {"name": "MUTATION_PROBABILITY", "list":np.linspace(0, 0.5, 10)}
-    seeds = np.random.randint(1, 429467295, 100)
+    hyperparameter_list = {"name": "MUTATION_PROBABILITY",
+                            "list":np.linspace(0, 0.4, 10)}
+    seeds = np.random.randint(1, 429467295, 50)
 
     for i in range(5):
         mane(i+1, hyperparameter_list, seeds)

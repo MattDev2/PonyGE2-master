@@ -111,7 +111,7 @@ params = {
     # DEBUGGING
     # Use this to turn on debugging mode. This mode doesn't write any files
     # and should be used when you want to test new methods.
-    'DEBUG': False,
+    'DEBUG': True,
 
     # PRINTING
     # Use this to print out basic statistics for each generation to the
