@@ -14,8 +14,8 @@ params = {
     'STEP': 'step',
 
     # Evolutionary Parameters
-    'POPULATION_SIZE': 200,
-    'GENERATIONS': 500,
+    'POPULATION_SIZE': 400,
+    'GENERATIONS': 75,
     'HILL_CLIMBING_HISTORY': 1000,
     'SCHC_COUNT_METHOD': "count_all",
 
@@ -39,7 +39,7 @@ params = {
     # Set the number of depths permutations are calculated for
     # (starting from the minimum path of the grammar).
     # Mainly for use with the grammar analyser script.
-    'PERMUTATION_RAMPS': 5,
+    'PERMUTATION_RAMPS': 10,
 
     # Select error metric
     'ERROR_METRIC': accuracy_percentage,
@@ -60,7 +60,8 @@ params = {
 
     # INITIALISATION
     # Set initialisation operator.
-    'INITIALISATION': "operators.initialisation.PI_grow",
+    #'INITIALISATION': "operators.initialisation.PI_grow",
+    'INITIALISATION': "operators.initialisation.rhh",
     # Set the maximum genome length for initialisation.
     'INIT_GENOME_LENGTH': 200,
     # Set the maximum tree depth for initialisation.
@@ -72,7 +73,7 @@ params = {
     # Set selection operator.
     'SELECTION': "operators.selection.tournament",
     # For tournament selection
-    'TOURNAMENT_SIZE': 2,
+    'TOURNAMENT_SIZE': None,
     # For truncation selection
     'SELECTION_PROPORTION': 0.5,
     # Allow for selection of invalid individuals during selection process.
@@ -87,7 +88,7 @@ params = {
     # Set crossover operator.
     'CROSSOVER': "operators.crossover.variable_onepoint",
     # Set crossover probability.
-    'CROSSOVER_PROBABILITY': 0.5,
+    'CROSSOVER_PROBABILITY': None,
     # Prevents crossover from generating invalids.
     'NO_CROSSOVER_INVALIDS': False,
 
@@ -111,7 +112,7 @@ params = {
     # DEBUGGING
     # Use this to turn on debugging mode. This mode doesn't write any files
     # and should be used when you want to test new methods.
-    'DEBUG': True,
+    'DEBUG': False, # Set to True to turn on debugging mode, IT BREAKS EVERYTHING!
 
     # PRINTING
     # Use this to print out basic statistics for each generation to the
@@ -123,7 +124,7 @@ params = {
     # SAVING
     # Save the phenotype of the best individual from each generation. Can
     # generate a lot of files. DEBUG must be False.
-    'SAVE_ALL': False,
+    'SAVE_ALL': True,
     # Save a plot of the evolution of the best fitness result for each
     # generation.
     'SAVE_PLOTS': True,

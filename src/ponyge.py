@@ -17,6 +17,7 @@ from stats.stats import get_stats
 from algorithm.parameters import params, set_params
 
 from fitness.supervised_learning.regression import regression
+from itertools import product
 
 import sys
 import time
@@ -103,11 +104,17 @@ def mane(fold, hyperparam, seeds):
         save_plot('line_plot.png', trackers.best_test_fitness_list)
 
     else:
-        pbar = tqdm(total = len(seeds) * len(hyperparam['list']))
-        for h in hyperparam['list']:
-            for i, seed in enumerate(seeds):
-                params['ITERATION_INDEX'] = i
-                params[hyperparam['name']] = h
+        #Generate all combinations of hyperparameter values
+        hyperparam_combinations = list(product(*[hyperparam['list'] for hyperparam in hyperparameter_list]))
+        total_iterations = len(seeds) * len(hyperparam_combinations)
+        pbar = tqdm(total = total_iterations)
+
+        for i, seed in enumerate(seeds):
+            params['ITERATION_INDEX'] = i
+            
+            for h_combination in hyperparam_combinations:
+                for hyperparam, h in zip(hyperparameter_list, h_combination):
+                    params[hyperparam['name']] = h
 
                 random.seed(int(seed))
                 # Run evolution
@@ -120,7 +127,7 @@ def mane(fold, hyperparam, seeds):
 
                 get_stats(individuals, end=True)
 
-                key = (i, h)
+                key = (i, h_combination)
                 results[key] = {
                     'test_result': trackers.best_ever.test_fitness,
                     'train_result': trackers.best_ever.training_fitness,
@@ -130,20 +137,20 @@ def mane(fold, hyperparam, seeds):
 
                 clear_trackers()
                 pbar.update(1)
-            #pbar.update(len(seeds))
-                
-        fitness_shape = (len(seeds), len(hyperparam['list']))
+
+        # # Update the fitness_shape and fitness_list_shapes to account for the new hyperparameters
+        fitness_shape = (len(seeds), len(hyperparam_combinations))
         fitness_list_shapes = (*fitness_shape, params['GENERATIONS'] + 1)
 
         test_results = np.reshape([results[key]['test_result'] for key in sorted(results)], fitness_shape)
         train_results = np.reshape([results[key]['train_result'] for key in sorted(results)], fitness_shape)
         test_evolution = np.reshape([results[key]['test_evolution'] for key in sorted(results)], fitness_list_shapes)
         train_evolution = np.reshape([results[key]['train_evolution'] for key in sorted(results)], fitness_list_shapes)
-        
-        output_file_path = f"./results_data/results_data_fold_{fold}.pkl"
-        
+
+        output_file_path = f"./results_data/results_data_MUT_CROSS_TOURNSIZE_fold_{fold}.pkl"
+
         data = {
-            'hyperparam': hyperparam,
+            'hyperparameters': hyperparameter_list,
             'seeds': seeds,
             'test_results': test_results,
             'train_results': train_results,
@@ -157,76 +164,14 @@ def mane(fold, hyperparam, seeds):
 
 if __name__ == "__main__":
     
-    hyperparameter_list = {"name": "MUTATION_PROBABILITY",
-                            "list":np.linspace(0, 0.4, 5)}
+    hyperparameter_list = [
+        {"name": "MUTATION_PROBABILITY", "list": np.linspace(0, 0.4, 5)},
+        {"name": "CROSSOVER_PROBABILITY", "list": np.linspace(0.5, 0.9, 5)},
+        {"name": "TOURNAMENT_SIZE", "list": [2, 3, 4, 6, 8]}
+        # Add more hyperparameters as needed
+    ]
     
     seeds = np.random.randint(1, 429467295, 10)
 
     for i in range(5):
         mane(i+1, hyperparameter_list, seeds)
-
-
-
-#         from itertools import product
-
-# # Create a list of hyperparameter dictionaries
-# hyperparameter_list = [
-#     {"name": "MUTATION_PROBABILITY", "list": np.linspace(0, 0.4, 5)},
-#     {"name": "ANOTHER_HYPERPARAMETER", "list": np.linspace(0.1, 0.9, 9)},
-#     # Add more hyperparameters as needed
-# ]
-
-# # Generate all combinations of hyperparameter values
-# hyperparam_combinations = list(product(*[hyperparam['list'] for hyperparam in hyperparameter_list]))
-
-# for i, seed in enumerate(seeds):
-#     params['ITERATION_INDEX'] = i
-    
-#     for h_combination in hyperparam_combinations:
-#         for hyperparam, h in zip(hyperparameter_list, h_combination):
-#             params[hyperparam['name']] = h
-
-#         random.seed(int(seed))
-#         # Run evolution
-#         individuals = params['SEARCH_LOOP']()
-#         # Print final review
-
-#         #print("Seed :",seed, "\n")
-#         #print(params['DATASET_TRAIN'])
-#         #print(params['DATASET_TEST'])
-
-#         get_stats(individuals, end=True)
-
-#         key = (i, h_combination)
-#         results[key] = {
-#             'test_result': trackers.best_ever.test_fitness,
-#             'train_result': trackers.best_ever.training_fitness,
-#             'test_evolution': trackers.best_test_fitness_list,
-#             'train_evolution': trackers.best_fitness_list
-#         }
-
-#         clear_trackers()
-#         pbar.update(1)
-
-# # Update the fitness_shape and fitness_list_shapes to account for the new hyperparameters
-# fitness_shape = (len(seeds), len(hyperparam_combinations))
-# fitness_list_shapes = (*fitness_shape, params['GENERATIONS'] + 1)
-
-# test_results = np.reshape([results[key]['test_result'] for key in sorted(results)], fitness_shape)
-# train_results = np.reshape([results[key]['train_result'] for key in sorted(results)], fitness_shape)
-# test_evolution = np.reshape([results[key]['test_evolution'] for key in sorted(results)], fitness_list_shapes)
-# train_evolution = np.reshape([results[key]['train_evolution'] for key in sorted(results)], fitness_list_shapes)
-
-# output_file_path = f"./results_data/results_data_fold_{fold}.pkl"
-
-# data = {
-#     'hyperparameters': hyperparameter_list,
-#     'seeds': seeds,
-#     'test_results': test_results,
-#     'train_results': train_results,
-#     'test_evolution': test_evolution,
-#     'train_evolution': train_evolution
-# }
-
-# with open(output_file_path, 'wb') as f:
-#     pickle.dump(data, f)

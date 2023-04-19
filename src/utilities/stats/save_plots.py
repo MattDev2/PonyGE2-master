@@ -17,7 +17,7 @@ def save_pareto_fitness_plot():
 
     :return: Nothing
     """
-
+    return
     from algorithm.parameters import params
 
     # Initialise up figure instance.
@@ -75,7 +75,7 @@ def save_plot_from_data(data, name):
     :param name: the name of the data to be plotted.
     :return: Nothing.
     """
-
+    return
     from algorithm.parameters import params
 
     # Initialise up figure instance.
