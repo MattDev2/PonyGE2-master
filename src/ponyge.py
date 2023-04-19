@@ -164,3 +164,69 @@ if __name__ == "__main__":
 
     for i in range(5):
         mane(i+1, hyperparameter_list, seeds)
+
+
+
+#         from itertools import product
+
+# # Create a list of hyperparameter dictionaries
+# hyperparameter_list = [
+#     {"name": "MUTATION_PROBABILITY", "list": np.linspace(0, 0.4, 5)},
+#     {"name": "ANOTHER_HYPERPARAMETER", "list": np.linspace(0.1, 0.9, 9)},
+#     # Add more hyperparameters as needed
+# ]
+
+# # Generate all combinations of hyperparameter values
+# hyperparam_combinations = list(product(*[hyperparam['list'] for hyperparam in hyperparameter_list]))
+
+# for i, seed in enumerate(seeds):
+#     params['ITERATION_INDEX'] = i
+    
+#     for h_combination in hyperparam_combinations:
+#         for hyperparam, h in zip(hyperparameter_list, h_combination):
+#             params[hyperparam['name']] = h
+
+#         random.seed(int(seed))
+#         # Run evolution
+#         individuals = params['SEARCH_LOOP']()
+#         # Print final review
+
+#         #print("Seed :",seed, "\n")
+#         #print(params['DATASET_TRAIN'])
+#         #print(params['DATASET_TEST'])
+
+#         get_stats(individuals, end=True)
+
+#         key = (i, h_combination)
+#         results[key] = {
+#             'test_result': trackers.best_ever.test_fitness,
+#             'train_result': trackers.best_ever.training_fitness,
+#             'test_evolution': trackers.best_test_fitness_list,
+#             'train_evolution': trackers.best_fitness_list
+#         }
+
+#         clear_trackers()
+#         pbar.update(1)
+
+# # Update the fitness_shape and fitness_list_shapes to account for the new hyperparameters
+# fitness_shape = (len(seeds), len(hyperparam_combinations))
+# fitness_list_shapes = (*fitness_shape, params['GENERATIONS'] + 1)
+
+# test_results = np.reshape([results[key]['test_result'] for key in sorted(results)], fitness_shape)
+# train_results = np.reshape([results[key]['train_result'] for key in sorted(results)], fitness_shape)
+# test_evolution = np.reshape([results[key]['test_evolution'] for key in sorted(results)], fitness_list_shapes)
+# train_evolution = np.reshape([results[key]['train_evolution'] for key in sorted(results)], fitness_list_shapes)
+
+# output_file_path = f"./results_data/results_data_fold_{fold}.pkl"
+
+# data = {
+#     'hyperparameters': hyperparameter_list,
+#     'seeds': seeds,
+#     'test_results': test_results,
+#     'train_results': train_results,
+#     'test_evolution': test_evolution,
+#     'train_evolution': train_evolution
+# }
+
+# with open(output_file_path, 'wb') as f:
+#     pickle.dump(data, f)
