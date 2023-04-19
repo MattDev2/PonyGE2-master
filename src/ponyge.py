@@ -88,7 +88,7 @@ def mane(fold, hyperparam, seeds):
 
     results = {}
 
-    if len(seeds) == 1:
+    if len(seeds) == -1:
         random.seed(seeds[0])
         params[hyperparam['name']] = hyperparam['list'][0]
         individuals = params['SEARCH_LOOP']()
@@ -96,9 +96,9 @@ def mane(fold, hyperparam, seeds):
         # Print final review
         get_stats(individuals, end=True)
 
-        print(((trackers.best_fitness_list)))
-        print('\n\n\n')
-        print(((trackers.best_test_fitness_list)))
+        #print(((trackers.best_fitness_list)))
+        #print('\n\n\n')
+        #print(((trackers.best_test_fitness_list)))
         
         save_plot('line_plot.png', trackers.best_test_fitness_list)
 
@@ -158,8 +158,9 @@ def mane(fold, hyperparam, seeds):
 if __name__ == "__main__":
     
     hyperparameter_list = {"name": "MUTATION_PROBABILITY",
-                            "list":np.linspace(0, 0.4, 10)}
-    seeds = np.random.randint(1, 429467295, 50)
+                            "list":np.linspace(0, 0.4, 5)}
+    
+    seeds = np.random.randint(1, 429467295, 10)
 
     for i in range(5):
         mane(i+1, hyperparameter_list, seeds)
