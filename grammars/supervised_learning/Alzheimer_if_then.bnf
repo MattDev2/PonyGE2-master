@@ -1,15 +1,17 @@
 <cf> ::= np.where(<cond>, 0, 1)
-<cond> ::= (<var> <relop> <var>) | (<cond> <lop> <cond>)
-                                     # Combinazione lineare delle features              # Interazione tra features          # Attivazione non lineare   
-<var> ::= x[:, <varidx>] | 0.<d><d> | <coef> * x[:, <varidx>] + <coef> * x[:, <varidx>] | x[:, <varidx1>] * x[:, <varidx2>] | <activation>
-                 # ReLU                # Sigmoid                 # Tahn
-<activation> ::= np.maximum(0, <var>) | 1 / (1 + np.exp(-<var>)) | np.tanh(<var>)
+<cond> ::= (<var> <relop> <var>) | (<var> <relop> <coef>) | (<cond> <lop> <cond>)
+
+<var> ::= x[:, <varidx>] | <linear_comb> | <interaction> | <activation>
+
+<linear_comb> ::=  <coef> * x[:, <varidx>] <lin_arithop> <coef> * x[:, <varidx>] | <coef> * x[:, <varidx>] <lin_arithop> <coef> * x[:, <varidx>] <arithop> <var>
+<interaction> ::= x[:, <varidx>] * x[:, <varidx>] | <coef> * x[:, <varidx>] * x[:, <varidx>] | x[:, <varidx>] * x[:, <varidx>] <arithop> <var> 
+<activation> ::= 1 / (1 + np.exp(-<var>)) | np.tanh(<var>) | np.log1p(<var>) | np.exp(<var>)
 
 <lop> ::= & | "|"
 <relop> ::= > | < | >= | <=   
+<lin_arithop> ::= + | -
+<arithop> ::= + | - | * | /
 
 <d> ::= GE_RANGE:9
 <coef> ::= 0.<d><d> | <d>.<d><d> 
 <varidx> ::= GE_RANGE:dataset_n_vars
-<varidx1> ::= GE_RANGE:dataset_n_vars
-<varidx2> ::= GE_RANGE:dataset_n_vars

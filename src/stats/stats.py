@@ -12,6 +12,8 @@ from utilities.stats.file_io import save_best_ind_to_file, \
 from utilities.stats.save_plots import save_pareto_fitness_plot, \
     save_plot_from_data
 
+from utilities.stats.get_best_test import get_best_test
+
 import os
 
 """Algorithm statistics"""
@@ -89,11 +91,16 @@ def get_soo_stats(individuals, end):
 
     # Get best individual.
     best = max(individuals)
+    #best_test_ind, best_test_fitness = get_best_test(individuals)
 
     if not trackers.best_ever or best > trackers.best_ever:
         # Save best individual in trackers.best_ever.
         trackers.best_ever = best
 
+    # if not trackers.best_ever_test or best_test_ind > trackers.best_ever_test:
+    #     # Save best individual in trackers.best_ever_test.
+    #     trackers.best_ever_test = best_test_ind
+    
     if end or params['VERBOSE'] or not params['DEBUG']:
         # Update all stats.
         update_stats(individuals, end)
@@ -103,6 +110,8 @@ def get_soo_stats(individuals, end):
         if not end:
             trackers.best_fitness_list.append(trackers.best_ever.fitness)
             trackers.best_test_fitness_list.append(params['FITNESS_FUNCTION'](trackers.best_ever, dist='test'))
+
+            # trackers.best_test_ind_fitness_list.append(best_test_fitness)
 
         if params['VERBOSE'] or end:
             save_plot_from_data(trackers.best_fitness_list, "best_fitness" + str(params['ITERATION_INDEX']))
@@ -139,7 +148,7 @@ def get_soo_stats(individuals, end):
         if stats['gen'] == 0:
             save_stats_headers(stats)
 
-        save_stats_to_file(stats, end)
+        #save_stats_to_file(stats, end)
 
         if params['SAVE_ALL']:
             save_best_ind_to_file(stats, trackers.best_ever, end, stats['gen'])
@@ -267,7 +276,7 @@ def get_moo_stats(individuals, end):
         if stats['gen'] == 0:
             save_stats_headers(stats)
 
-        save_stats_to_file(stats, end)
+        #save_stats_to_file(stats, end)
 
         if params['SAVE_ALL']:
             save_first_front_to_file(stats, end, stats['gen'])

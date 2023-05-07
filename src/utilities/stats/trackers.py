@@ -29,3 +29,9 @@ stats_list = []
 
 best_ever = None
 # Store the best ever individual here.
+
+best_ever_test = None
+# Store the individual with the best test fitness here.
+
+best_test_ind_fitness_list = []
+# Store the fitnesses score of the best infividuals with the best test fitness.

@@ -125,9 +125,9 @@ class Individual(object):
         :return: Nothing unless multi-core evaluation is being used. In that
         case, returns self.
         """
-
         # Evaluate fitness using specified fitness function.
         self.fitness = params['FITNESS_FUNCTION'](self)
+        #print("My fitness is ",self.fitness)
 
         if params['MULTICORE']:
             return self

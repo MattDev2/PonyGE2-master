@@ -166,7 +166,7 @@ def rhh(size):
     depths = range(params['BNF_GRAMMAR'].min_ramp + 1,
                    params['MAX_INIT_TREE_DEPTH'] + 1)
     population = []
-
+    print(size)
     if size < 2:
         # If the population size is too small, can't use RHH initialisation.
         print("Error: population size too small for RHH initialisation.")
@@ -181,7 +181,6 @@ def rhh(size):
             "Error: Maximum initialisation depth too low for specified " \
             "grammar."
         raise Exception(s)
-
     else:
         if size % 2:
             # Population size is odd, need an even population for RHH
@@ -395,7 +394,6 @@ def load_population(target):
 
     # Set path for seeds folder
     path_1 = path.join(getcwd(), "..", "seeds")
-
     if not path.isdir(path_1):
         # Seeds folder does not exist.
 
@@ -492,7 +490,7 @@ def load_population(target):
 
         # Add new ind to the list of seed individuals.
         seed_inds.append(ind)
-
+    print("Seed individuals NUMBER IS " ,len(seed_inds))
     return seed_inds
 
 

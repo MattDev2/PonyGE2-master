@@ -26,7 +26,7 @@ params = {
     'RUNS': 1,
 
     # Class of problem
-    'FITNESS_FUNCTION': "supervised_learning.regression",
+    'FITNESS_FUNCTION': "supervised_learning.classification",
 
     # Select problem dataset
     'DATASET_TRAIN': None,
@@ -42,7 +42,7 @@ params = {
     'PERMUTATION_RAMPS': 10,
 
     # Select error metric
-    'ERROR_METRIC': accuracy_percentage,
+    'ERROR_METRIC': "accuracy_percentage",
 
     # Optimise constants in the supervised_learning fitness function.
     'OPTIMIZE_CONSTANTS': False,
@@ -54,8 +54,8 @@ params = {
     'MAX_TREE_DEPTH': 50,  # SET TO 90 DUE TO PYTHON EVAL() STACK LIMIT.
     # INCREASE AT YOUR OWN RISK.
     'MAX_TREE_NODES': 100,
-    'CODON_SIZE': 100000,
-    'MAX_GENOME_LENGTH': 50,
+    'CODON_SIZE': 10000000,
+    'MAX_GENOME_LENGTH': 100,
     'MAX_WRAPS': 0,
 
     # INITIALISATION
@@ -65,7 +65,7 @@ params = {
     # Set the maximum genome length for initialisation.
     'INIT_GENOME_LENGTH': 200,
     # Set the maximum tree depth for initialisation.
-    'MAX_INIT_TREE_DEPTH': 10,
+    'MAX_INIT_TREE_DEPTH': 50,
     # Set the minimum tree depth for initialisation.
     'MIN_INIT_TREE_DEPTH': None,
 
@@ -88,7 +88,7 @@ params = {
     # Set crossover operator.
     'CROSSOVER': "operators.crossover.variable_onepoint",
     # Set crossover probability.
-    'CROSSOVER_PROBABILITY': None,
+    'CROSSOVER_PROBABILITY': 0.7,
     # Prevents crossover from generating invalids.
     'NO_CROSSOVER_INVALIDS': False,
 
@@ -97,7 +97,7 @@ params = {
     'MUTATION': "operators.mutation.int_flip_per_codon",
     # Set mutation probability (None defaults to 1 over the length of
     # the genome for each codon)
-    'MUTATION_PROBABILITY': None,
+    'MUTATION_PROBABILITY': 0.1,
     # Set number of mutation events
     'MUTATION_EVENTS': 1,
     # Prevents mutation from generating invalids.
@@ -153,7 +153,7 @@ params = {
     'SEED_INDIVIDUALS': [],
     # Specify a target seed folder in the 'seeds' directory that contains a
     # population of individuals with which to seed a run.
-    'TARGET_SEED_FOLDER': None,
+    'TARGET_SEED_FOLDER': None,#"alzheimer_seed_population",
     # Set a target phenotype string for reverse mapping into a GE
     # individual
     'REVERSE_MAPPING_TARGET': None,

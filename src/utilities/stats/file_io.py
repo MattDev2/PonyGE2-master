@@ -15,7 +15,6 @@ def save_stats_to_file(stats, end=False):
     process has finished.
     :return: Nothing.
     """
-    return
     if params['ITERATION_INDEX'] != -1:
         filename = path.join(params['FILE_PATH'], "stats"+str( params['ITERATION_INDEX']) +".tsv")
     else:
@@ -66,8 +65,7 @@ def save_best_ind_to_file(stats, ind, end=False, name="best"):
     :param name: The name of the individual. Default set to "best".
     :return: Nothing.
     """
-    #print("Saving best individual to file...")
-    return    
+    #print("Saving best individual to file...")    
     if  params['ITERATION_INDEX'] != -1:
         filename = path.join(params['FILE_PATH'], (str(name) +str(params['ITERATION_INDEX']) +".txt"))
     else:
@@ -155,7 +153,7 @@ def generate_folders_and_files():
     params['FILE_PATH'] = path.join(params['FILE_PATH'],
                                     str(params['TIME_STAMP']))
 
-    save_params_to_file()
+    #save_params_to_file()
 
 
 def save_params_to_file():
@@ -164,7 +162,6 @@ def save_params_to_file():
 
     :return: Nothing.
     """
-    return
     # Generate file path and name.
 
     if params['ITERATION_INDEX'] != -1:
