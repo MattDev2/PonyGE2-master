@@ -140,6 +140,35 @@ def Hamming_error(y, yhat):
 
 Hamming_error.maximise = False
 
+# import numpy as np
+# from sklearn.metrics import accuracy_score
+
+# def confusion_matrix_elements(y, yhat):
+#     TP = np.sum((y == 1) & (yhat == 1))
+#     TN = np.sum((y == 0) & (yhat == 0))
+#     FP = np.sum((y == 0) & (yhat == 1))
+#     FN = np.sum((y == 1) & (yhat == 0))
+#     return TP, TN, FP, FN
+
+# def accuracy_percentage(y, yhat):
+#     if not isinstance(yhat, np.ndarray) or len(yhat.shape) < 1:
+#         yhat = np.ones_like(y) * yhat
+
+#     y_vals = set(y)
+#     if -1 in y_vals:
+#         y[y == -1] = 0
+
+#     assert len(y_vals) == 1 or len(y_vals) == 2
+
+#     yhat = (yhat > 0)
+#     TP, TN, FP, FN = confusion_matrix_elements(y, yhat)
+    
+#     return accuracy_score(y, yhat) * 100#, FP, FN
+
+# accuracy_percentage.maximise = True
+
+
+
 def accuracy_percentage(y, yhat):
     """
     The accuracy is a metric for classification which calculates the percentage of 
